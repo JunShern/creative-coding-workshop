@@ -1,0 +1,26 @@
+body {
+    margin: 0;
+    font-family: "Lato", sans-serif;
+    font-size: 18px;
+    color: #EEE;
+    overflow-x: hidden;
+}
+.center {
+    position: absolute;
+    height: 100vh;
+    margin-left: 5vw;
+    max-width: 500px;
+    padding: 2em;
+    background-color: rgba(20,20,20,0.8);
+}
+li {
+    margin: 0 0 1em 0;   
+}
+a {
+    color: #ec245e;
+    text-decoration: none;
+}
+a:hover {
+    color: #ec245e;
+    text-decoration: underline;
+}
