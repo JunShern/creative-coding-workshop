@@ -1,18 +1,21 @@
 body {
     margin: 0;
+    padding: 0;
     font-family: "Lato", sans-serif;
     font-size: 18px;
     color: #EEE;
+    background-color: rgb(30,30,30);
     overflow-x: hidden;
 }
-.center {
+.content {
     position: absolute;
-    height: 100vh;
     margin-left: 5vw;
     max-width: 500px;
     padding: 2em;
     background-color: rgba(20,20,20,0.8);
 }
+.title h1 { margin-bottom: 0.1em }
+.title h4 { margin-top: 0.1em }
 li {
     margin: 0 0 1em 0;   
 }
@@ -23,4 +26,34 @@ a {
 a:hover {
     color: #ec245e;
     text-decoration: underline;
+}
+
+
+.button-div {
+    margin-top: 20px;
+}
+a.button {
+    display: inline-block;
+    cursor: pointer;
+    border: 0.2em solid white;
+    margin: 0.2em;
+    padding:1em 3em;
+    font-family:sans-serif;
+    font-weight:800;
+    color:white;
+    font-size: 80%;
+    text-align:center;
+    transition: all 0.15s;
+    background: transparent;
+}
+a.button:hover{
+    color:rgba(150,150,150,0.7);
+    border-color:rgba(150,150,150,0.7);
+}
+a.button:active{
+    color:rgba(150,150,150,0.7);
+    border-color:rgba(150,150,150,0.7);
+}
+a.button:focus {
+    outline:0;
 }
