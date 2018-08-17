@@ -1,1 +1,1 @@
-# p5js-workshop-2018
+# Creative Coding for Beginners
