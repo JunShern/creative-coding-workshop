@@ -11,6 +11,8 @@ var colorPalette = [
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
+  textAlign(CENTER, CENTER);
+  textSize(18);
   noStroke();
   frameRate(20);
   for (var i=0; i<numBalls; i++) {
@@ -25,6 +27,8 @@ function draw() {
     balls[i].display();
     balls[i].update();
   }
+  fill(255);
+  text("This example is under construction. Please come back later!", width/2, height/2);
 }
 
 function Ball() {

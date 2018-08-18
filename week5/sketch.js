@@ -1,65 +1,69 @@
-var balls = [];
-var numBalls = 200;
-var colorPalette = [
-  [132,94,194],
-  [214,93,177],
-  [255,111,145],
-  [255,150,113],
-  [255,199,95],
-  [249,248,113]
-];
+var video;
+
+var vScale = 16;
+var slider;
+
+var cols = 40;
+var rows = 30;
+
+var boxes = [];
 
 function setup() {
-  createCanvas(windowWidth, windowHeight);
-  noStroke();
-  frameRate(20);
-  for (var i=0; i<numBalls; i++) {
-    var ball = new Ball();
-    balls.push(ball);
+  noCanvas();
+  // Create a temp checkbox just to calibrate size
+  var temp = createCheckbox();
+  temp.style('display', 'inline');
+  var checkboxW = temp.size().width;
+  var checkboxH = temp.size().height;
+  cols = windowWidth / checkboxW;
+  rows = windowHeight / checkboxH;
+  temp.style('display', 'none');
+
+  pixelDensity(1);
+  video = createCapture(VIDEO);
+  video.size(cols, rows);
+  slider = createSlider(0, 255, 77);
+
+  for (var y = 0; y < rows; y++) {
+    // noprotect
+    for (var x = 0; x < cols; x++) {
+      var box = createCheckbox();
+      box.style('display', 'inline');
+      box.parent('mirror');
+      boxes.push(box);
+    }
+    var linebreak = createSpan('<br/>');
+    linebreak.parent('mirror');
   }
+
 }
 
 function draw() {
-  background(30);
-  for (var i=0; i<balls.length; i++) {
-    balls[i].display();
-    balls[i].update();
+  video.loadPixels();
+  for (var y = 0; y < video.height; y++) {
+    for (var x = 0; x < video.width; x++) {
+      var index = (video.width - x + 1 + (y * video.width))*4;
+      var r = video.pixels[index+0];
+      var g = video.pixels[index+1];
+      var b = video.pixels[index+2];
+
+      var bright = (r+g+b)/3;
+
+      var threshold = slider.value();
+
+      var checkIndex = x + y * cols;
+
+      if (bright > threshold) {
+        boxes[checkIndex].checked(false);
+      } else {
+        boxes[checkIndex].checked(true);
+      }
+    }
   }
+ 
 }
 
-function Ball() {
-  this.position = createVector(random(width), random(height));
-  this.diameter = random(5, 20);
-  this.color = random(colorPalette);
-  this.direction = createVector(random(-5,5), random(-5,5));
 
-  this.display = function(){
-    fill(this.color);
-    ellipse(this.position.x, this.position.y, this.diameter, this.diameter);
-  };
-  this.update = function() {
-    // Add damping
-    this.direction.x = this.direction.x * 0.97;
-    this.direction.y = this.direction.y * 0.97;
-
-    // Reset direction if almost stopped
-    if (abs(this.direction.x) + abs(this.direction.y) < 0.1) {
-      this.direction = createVector(random(-5,5), random(-5,5));
-    }
-
-    // Update position
-    this.position.x = this.position.x + this.direction.x;
-    this.position.y = this.position.y + this.direction.y;
-    if (this.position.x <= 0 || this.position.x >= width) {
-      this.direction.x = - this.direction.x;
-    }
-    if (this.position.y <= 0 || this.position.y >= height) {
-      this.direction.y = - this.direction.y;
-    }
-    this.position.x = constrain(this.position.x, 0, width);
-    this.position.y = constrain(this.position.y, 0, height);
-  };
-}
 
 function windowResized() {
   resizeCanvas(windowWidth, windowHeight);

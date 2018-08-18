@@ -9,6 +9,12 @@
   
   <link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
+  <style>
+    body {
+      background-color: white;
+      overflow: hidden;
+    }
+  </style>
   <title>Week 5</title>
 </head>
 
@@ -22,7 +28,13 @@
     <h1>Week 5</h1>
     <h2>Wild wild web</h2>
 
-    <p>This page is under construction. Please come back later!</p>
+    <p>This week, we peek further outside of the p5.js sandbox we’ve been living in, and realize that there’s so much more that we can play with.</p>
+    
+    <p>We’ll learn how to create and manipulate <b>browser elements</b> like sliders, checkboxes, buttons, text input, even access the webcam on the browser - we'll spend some time on this last element, taking the opportunity to dig into a bit of <b>image processing</b>.</p>
+
+    <p>And then, we’re going to create my personal favorite project in this course - the wacky and ingenious Checkbox Mirror (idea borrowed from <a href="https://www.youtube.com/watch?v=m1G6WBvrOBE">Daniel Shiffman</a>)!</p>
+
+    <p class="project-title"><b>Project:</b> Checkbox Mirror</p>
 
     <p>Check out the material for each week:</p>
     <div class="button-div">
@@ -36,4 +48,9 @@
 
     <p>Back to the <a href="index.html">homepage</a>!</p>
   </div>
+
+  <div style="width: 100vw">
+    <div id="mirror"></div>
+  </div>
+ 
 </body>
