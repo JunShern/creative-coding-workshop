@@ -150,17 +150,17 @@ function drawCursor() {
 	noCursor(); // In-built function to hide cursor
 	// Draw cursor tail
 	colorMode(HSB,100);
-  strokeWeight(2);
-  stroke(12, 30, 100);
+	strokeWeight(2);
+	stroke(12, 30, 100);
 	colorMode(RGB,255);
-  line(mouseX, mouseY, pmouseX, pmouseY);
-  colorMode(HSB,100);
-  strokeWeight(2);
-  stroke(20, 50, 100);
+	line(mouseX, mouseY, pmouseX, pmouseY);
+	colorMode(HSB,100);
+	strokeWeight(2);
+	stroke(20, 50, 100);
 	colorMode(RGB,255);
 	var j = 10;
-  line(mouseX+random(-j,j), mouseY+random(-j,j), pmouseX+random(-j,j), pmouseY+random(-j,j));
-  
+	line(mouseX+random(-j,j), mouseY+random(-j,j), pmouseX+random(-j,j), pmouseY+random(-j,j));
+
 	catchSize = constrain(catchSize-5, 10, 500);
 }
 
@@ -274,5 +274,5 @@ function FireChild(index, xpos, ypos) {
 }
 
 function windowResized() {
-  resizeCanvas(windowWidth, windowHeight);
+	resizeCanvas(windowWidth, windowHeight);
 }
