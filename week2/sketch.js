@@ -7,6 +7,8 @@ let blockWidth;
 
 let ballPosition;
 let ballDirection;
+let ballTrail = [];
+const MAX_TRAIL_LENGTH = 20;
 let color;
 
 let score = 0;
@@ -58,6 +60,11 @@ function draw() {
 	text(score, width/2, height/2);
 }
 
+function keyPressed() {
+	blockPositionY = blockPositionY - 100;
+	blockPositionY = constrain(blockPositionY, 0, height - blockHeight);
+}
+
 function drawVolumeBars() {
 	let volumeBarWidth = width / 200;
 	stroke(50);
@@ -73,6 +80,13 @@ function drawVolumeBars() {
 }
 
 function drawBall() {
+	for (let i=0; i<ballTrail.length-1; i++) {
+		strokeWeight(1);
+		stroke(color);
+		let spread = 10;
+		line(ballTrail[i].x + random(-spread, spread), ballTrail[i].y + random(-spread, spread), ballTrail[i+1].x, ballTrail[i+1].y);
+	}
+	noStroke();
 	ellipse(ballPosition.x, ballPosition.y, ballDiameter, ballDiameter);
 	fill(30);
 	ellipse(ballPosition.x, ballPosition.y, ballDiameter*2/3, ballDiameter*2/3);
@@ -99,10 +113,17 @@ function updateBallPosition() {
 			score = 0;
 			ballPosition = createVector(width/5, height/2);
 			ballDirection = createVector(10, random([-5, 5]));
+			ballTrail = [];
 		}
 	}
 	ballPosition.x = constrain(ballPosition.x, 0, width);
 	ballPosition.y = constrain(ballPosition.y, 0, height);
+
+	// Record a list of positions for the ball's trail
+	ballTrail.push(ballPosition.copy());
+	if (ballTrail.length > MAX_TRAIL_LENGTH) {
+		ballTrail.splice(0, 1); // Remove element from index 0
+	}
 }
 
 function windowResized() {
