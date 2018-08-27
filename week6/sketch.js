@@ -1,70 +1,106 @@
-var balls = [];
-var numBalls = 200;
-var colorPalette = [
-  [132,94,194],
-  [214,93,177],
-  [255,111,145],
-  [255,150,113],
-  [255,199,95],
-  [249,248,113]
-];
+// Data source: https://www.kaggle.com/rakannimer/billboard-lyrics
+// Columns: "Rank","Song","Artist","Year","Lyrics","Source"
+
+let table;
+const BASE_YEAR = 1965;
+const MAX_YEAR = 2015;
+const NUM_YEARS = MAX_YEAR - BASE_YEAR + 1;
+let wordCountByYear = [];
+let largestWordCount = 0;
+
+function preload() {
+  table = loadTable('week6/billboard_lyrics_1964-2015.csv', 'csv', 'header');
+}
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
-  textAlign(CENTER, CENTER);
-  textSize(18);
-  noStroke();
-  frameRate(20);
-  for (var i=0; i<numBalls; i++) {
-    var ball = new Ball();
-    balls.push(ball);
+
+  for (let i=0; i<NUM_YEARS; i++) {
+    wordCountByYear.push({});
+  }
+  // console.log(table.getRowCount() + ' total rows in table');
+  // console.log(table.getColumnCount() + ' total columns in table');
+
+  for (let r = 0; r < table.getRowCount(); r++) {
+    // Year
+    let year = table.getNum(r, "Year");
+    let wordCount = wordCountByYear[year - BASE_YEAR];
+    
+    // Process lyrics
+    let lyrics = table.getString(r, "Lyrics");
+    let words = lyrics.split(" ");
+    for (let i=0; i<words.length; i++) {
+      if (words[i] in wordCount) {
+        wordCount[words[i]] = wordCount[words[i]] + 1;
+        if (wordCount[words[i]] > largestWordCount) {
+          largestWordCount = wordCount[words[i]];
+        }
+      } else {
+        wordCount[words[i]] = 1;
+      }
+    }
+  }
+
+  // Remove all words that occur fewer than 10 times
+  // for (let i=0; i<wordCountByYear.length; i++) {
+  //   let wordCount = wordCountByYear[i];
+  //   for (var word in wordCount) {
+  //     if (wordCount.hasOwnProperty(word)) {
+  //       if (wordCount[word] < 100) {
+  //         // console.log(`Deleting ${word} from ${i}`);
+  //         delete wordCount[word];
+  //       }
+  //     }
+  //   }
+  // }
+
+  // Sort words by frequency
+  for (let i=0; i<wordCountByYear.length; i++) {
+    let wordCount = wordCountByYear[i];
+    let arrayWordCount = [];
+    for (var word in wordCount) {
+      if (wordCount.hasOwnProperty(word)) {
+        arrayWordCount.push([word, wordCount[word]]);
+      }
+    }
+    arrayWordCount.sort(function(a, b) {
+      return a[1] - b[1];
+    });
+
+    // Keep only the 100 most frequent words
+    arrayWordCount.splice(0, arrayWordCount.length - 100);
+    wordCountByYear[i] = arrayWordCount;
   }
 }
 
 function draw() {
   background(30);
-  for (var i=0; i<balls.length; i++) {
-    balls[i].display();
-    balls[i].update();
+  let yearIndex = round(map(mouseX, 0, width, 0, NUM_YEARS-1));
+  let wordCount = wordCountByYear[yearIndex];
+
+  textSize(16);
+  for (let i=0; i<wordCount.length; i++) {
+    let w = width / wordCount.length;
+    let h = (height - 50) * wordCount[i][1] / largestWordCount;
+    let colorVal = map(h, 0, largestWordCount/3, 0, 255);
+    fill(colorVal, 250 - colorVal/2, 255 - colorVal);
+    rect(i*w, height - h, w, height);
+
+    push();
+    translate((i+1)*w, height - h);
+    rotate(3*HALF_PI);
+    fill(255);
+    text(wordCount[i][0], 2, 0);
+    pop();
   }
+
+  push();
   fill(255);
-  text("This example is under construction. Please come back later!", width/2, height/2);
-}
-
-function Ball() {
-  this.position = createVector(random(width), random(height));
-  this.diameter = random(5, 20);
-  this.color = random(colorPalette);
-  this.direction = createVector(random(-5,5), random(-5,5));
-
-  this.display = function(){
-    fill(this.color);
-    ellipse(this.position.x, this.position.y, this.diameter, this.diameter);
-  };
-  this.update = function() {
-    // Add damping
-    this.direction.x = this.direction.x * 0.97;
-    this.direction.y = this.direction.y * 0.97;
-
-    // Reset direction if almost stopped
-    if (abs(this.direction.x) + abs(this.direction.y) < 0.1) {
-      this.direction = createVector(random(-5,5), random(-5,5));
-    }
-
-    // Update position
-    this.position.x = this.position.x + this.direction.x;
-    this.position.y = this.position.y + this.direction.y;
-    if (this.position.x <= 0 || this.position.x >= width) {
-      this.direction.x = - this.direction.x;
-    }
-    if (this.position.y <= 0 || this.position.y >= height) {
-      this.direction.y = - this.direction.y;
-    }
-    this.position.x = constrain(this.position.x, 0, width);
-    this.position.y = constrain(this.position.y, 0, height);
-  };
-}
-
-function windowResized() {
-  resizeCanvas(windowWidth, windowHeight);
+  textSize(20);
+  textAlign(LEFT, BOTTOM);
+  text(`Top 100 words from the songs of the Billboard Hot 100`, width/2, height/2);
+  textAlign(LEFT, TOP);
+  textSize(50);
+  text(`${yearIndex + BASE_YEAR}`, width/2, height/2 + 10);
+  pop();
 }
