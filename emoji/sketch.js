@@ -37,7 +37,7 @@ function Icon() {
 
   this.position(random(windowWidth), random(windowHeight));
 
-  this.updateElement() {
+  this.updateElement = function() {
     this.elmt.position(random(windowWidth), random(windowHeight));
   }
 }

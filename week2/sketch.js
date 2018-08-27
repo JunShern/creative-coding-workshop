@@ -7,8 +7,6 @@ let blockWidth;
 
 let ballPosition;
 let ballDirection;
-let ballTrail = [];
-const MAX_TRAIL_LENGTH = 20;
 let color;
 
 let score = 0;
@@ -33,7 +31,7 @@ function setup() {
 }
 
 function draw() {
-	background(30);
+	background(30, 100);
 	let hue = map(ballPosition.x, 0, width, 0, 255);
 	color = [hue, 140, 255];
 
@@ -80,12 +78,6 @@ function drawVolumeBars() {
 }
 
 function drawBall() {
-	for (let i=0; i<ballTrail.length-1; i++) {
-		strokeWeight(1);
-		stroke(color);
-		let spread = 10;
-		line(ballTrail[i].x + random(-spread, spread), ballTrail[i].y + random(-spread, spread), ballTrail[i+1].x, ballTrail[i+1].y);
-	}
 	noStroke();
 	ellipse(ballPosition.x, ballPosition.y, ballDiameter, ballDiameter);
 	fill(30);
@@ -118,12 +110,6 @@ function updateBallPosition() {
 	}
 	ballPosition.x = constrain(ballPosition.x, 0, width);
 	ballPosition.y = constrain(ballPosition.y, 0, height);
-
-	// Record a list of positions for the ball's trail
-	ballTrail.push(ballPosition.copy());
-	if (ballTrail.length > MAX_TRAIL_LENGTH) {
-		ballTrail.splice(0, 1); // Remove element from index 0
-	}
 }
 
 function windowResized() {
