@@ -117,20 +117,20 @@ function draw() {
     let w = width / allWordsArray.length;
     let h;
     if (word in wordCount) { 
-      h = (height - 50) * wordCount[word] / largestWordCount;
-      let colorVal = map(h, 0, largestWordCount/3, 0, 255);
-      fill(colorVal, 250 - colorVal/2, 255 - colorVal);
-      rect(i*w, height - h, w, height);
-  
-      push();
-      translate((i+1)*w, height - h);
-      rotate(3*HALF_PI);
-      fill(255);
-      text(`${allWordsArray[i]} (${wordCount[word]})`, 2, 0);
-      pop();
+      h = (height - 80) * wordCount[word] / largestWordCount;
     } else {
       h = 0;
     }
+    let colorVal = map(h, 0, largestWordCount/3, 0, 255);
+    fill(colorVal, 250 - colorVal/2, 255 - colorVal);
+    rect(i*w, height - h, w, height);
+
+    push();
+    translate((i+1)*w, height - h);
+    rotate(3*HALF_PI);
+    fill(255);
+    text(`${word} (${wordCount[word] || 0})`, 2, 0);
+    pop();
   }
 
   push();
