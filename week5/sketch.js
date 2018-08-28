@@ -3,8 +3,8 @@ var video;
 var vScale = 16;
 var slider;
 
-var cols = 40;
-var rows = 30;
+var cols;
+var rows;
 
 var boxes = [];
 
@@ -15,9 +15,10 @@ function setup() {
   temp.style('display', 'inline');
   var checkboxW = temp.size().width;
   var checkboxH = temp.size().height;
-  cols = windowWidth / checkboxW;
-  rows = windowHeight / checkboxH;
   temp.style('display', 'none');
+  // Figure out how many rows and columns can fit on this screen
+  cols = round(0.98 * windowWidth / checkboxW);
+  rows = round(0.98*windowHeight / checkboxH);
 
   pixelDensity(1);
   video = createCapture(VIDEO);
@@ -59,11 +60,8 @@ function draw() {
         boxes[checkIndex].checked(true);
       }
     }
-  }
- 
+  } 
 }
-
-
 
 function windowResized() {
   resizeCanvas(windowWidth, windowHeight);
