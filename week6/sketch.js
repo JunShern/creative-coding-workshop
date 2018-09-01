@@ -16,7 +16,7 @@ function preload() {
 function setup() {
   createCanvas(windowWidth, windowHeight);
 
-  for (let i=0; i<NUM_YEARS; i++) {
+  for (let i = 0; i < NUM_YEARS; i++) {
     wordCountByYear.push({});
   }
   // console.log(table.getRowCount() + ' total rows in table');
@@ -26,11 +26,11 @@ function setup() {
     // Year
     let year = table.getNum(r, "Year");
     let wordCount = wordCountByYear[year - BASE_YEAR];
-    
+
     // Process lyrics
     let lyrics = table.getString(r, "Lyrics");
     let words = lyrics.split(" ");
-    for (let i=0; i<words.length; i++) {
+    for (let i = 0; i < words.length; i++) {
       if (words[i] in wordCount) {
         wordCount[words[i]] = wordCount[words[i]] + 1;
         if (wordCount[words[i]] > largestWordCount) {
@@ -56,7 +56,7 @@ function setup() {
   // }
 
   // Sort words by frequency
-  for (let i=0; i<wordCountByYear.length; i++) {
+  for (let i = 0; i < wordCountByYear.length; i++) {
     let wordCount = wordCountByYear[i];
     let arrayWordCount = [];
     for (var word in wordCount) {
@@ -64,14 +64,14 @@ function setup() {
         arrayWordCount.push([word, wordCount[word]]);
       }
     }
-    arrayWordCount.sort(function(a, b) {
+    arrayWordCount.sort(function (a, b) {
       return a[1] - b[1];
     });
 
     // Keep only the 100 most frequent words
     arrayWordCount.splice(0, arrayWordCount.length - 50);
     wordCount = {};
-    for (let j=0; j<arrayWordCount.length; j++) {
+    for (let j = 0; j < arrayWordCount.length; j++) {
       wordCount[arrayWordCount[j][0]] = arrayWordCount[j][1];
     }
     filteredWordCountByYear[i] = wordCount;
@@ -79,7 +79,7 @@ function setup() {
 
   // Get all words across all years
   allWords = {};
-  for (let i=0; i<filteredWordCountByYear.length; i++) {
+  for (let i = 0; i < filteredWordCountByYear.length; i++) {
     let wordCount = filteredWordCountByYear[i];
     for (var word in wordCount) {
       if (wordCount.hasOwnProperty(word)) {
@@ -98,36 +98,36 @@ function setup() {
     allWordsArray.push([word, allWords[word]]);
   }
   // Sort words by frequency
-  allWordsArray.sort(function(a, b) {
+  allWordsArray.sort(function (a, b) {
     return a[1] - b[1];
   });
-  for (let i=0; i<allWordsArray.length; i++) {
+  for (let i = 0; i < allWordsArray.length; i++) {
     allWordsArray[i] = allWordsArray[i][0];
   }
 }
 
 function draw() {
   background(30);
-  let yearIndex = round(map(mouseX, 0, width, 0, NUM_YEARS-1));
+  let yearIndex = round(map(mouseX, 0, width, 0, NUM_YEARS - 1));
   let wordCount = wordCountByYear[yearIndex];
 
   textSize(16);
-  for (let i=0; i<allWordsArray.length; i++) {
+  for (let i = 0; i < allWordsArray.length; i++) {
     let word = allWordsArray[i];
     let w = width / allWordsArray.length;
     let h;
-    if (word in wordCount) { 
+    if (word in wordCount) {
       h = (height - 80) * wordCount[word] / largestWordCount;
     } else {
       h = 0;
     }
-    let colorVal = map(h, 0, largestWordCount/3, 0, 255);
-    fill(colorVal, 250 - colorVal/2, 255 - colorVal);
-    rect(i*w, height - h, w, height);
+    let colorVal = map(h, 0, largestWordCount / 3, 0, 255);
+    fill(colorVal, 250 - colorVal / 2, 255 - colorVal);
+    rect(i * w, height - h, w, height);
 
     push();
-    translate((i+1)*w, height - h);
-    rotate(3*HALF_PI);
+    translate((i + 1) * w, height - h);
+    rotate(3 * HALF_PI);
     fill(255);
     text(`${word} (${wordCount[word] || 0})`, 2, 0);
     pop();
@@ -137,9 +137,13 @@ function draw() {
   fill(255);
   textSize(20);
   textAlign(LEFT, BOTTOM);
-  text(`Popular words from the songs of the Billboard Hot 100`, width/2, height/2);
+  text(`Popular words from the songs of the Billboard Hot 100`, width / 2, height / 2);
   textAlign(LEFT, TOP);
   textSize(50);
-  text(`${yearIndex + BASE_YEAR}`, width/2, height/2 + 10);
+  text(`${yearIndex + BASE_YEAR}`, width / 2, height / 2 + 10);
   pop();
+}
+
+function windowResized() {
+  resizeCanvas(windowWidth, windowHeight);
 }

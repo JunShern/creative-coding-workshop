@@ -3,41 +3,63 @@ let emoji_array = [];
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
-
   while (emoji_array.length < MAX_EMOJIS) {
-    let icon = createSpan();
-    icon.position(random(windowWidth), random(windowHeight));
-    icon.style("z-index", -1);
-    emoji_array.push(icon);
+    let emoji = new Emoji();
+    emoji_array.push(emoji);
   }
 }
 
 function draw() {
   for (let i=0; i<emoji_array.length; i++) {
-    let distance = (emoji_array[i].position().x - mouseX)**2 + (emoji_array[i].position().y - mouseY)**2;
-    if (distance < 20000) {
-      emoji_array[i].class("fas fa-laugh fa-3x");
-      emoji_array[i].style("color", color(255, 200, 0));
-    } else if (distance < 100000) {
-      emoji_array[i].class("fas fa-smile fa-3x");
-      emoji_array[i].style("color", color(255, 150, 0));
-    } else if (distance < 200000) {
-      emoji_array[i].class("fas fa-meh fa-3x");
-      emoji_array[i].style("color", color(150, 150, 150));
+    let thisEmoji = emoji_array[i];
+    let distance = calcDistance(thisEmoji.x, thisEmoji.y, mouseX, mouseY);
+    if (distance < 300) {
+      thisEmoji.laugh();
+    } else if (distance < 600) {
+      thisEmoji.smile();
+    } else if (distance < 800) {
+      thisEmoji.meh();
     } else {
-      emoji_array[i].class("fas fa-sad-tear fa-3x");
-      emoji_array[i].style("color", color(100, 120, 180));
+      thisEmoji.tear();
     }
+    thisEmoji.display();
   }
 }
 
-function Icon() {
+function calcDistance(x1, y1, x2, y2) {
+  let dist = sqrt((x1 - x2)**2 + (y1 - y2)**2);
+  return dist;
+}
+
+function Emoji() {
   this.elmt = createSpan();
+  this.elmt.class("fas fa-sad-tear fa-3x");
+  this.elmt.style("color", color(50, 80, 120));
   this.elmt.style("z-index", -1);
+  this.x = random(windowWidth);
+  this.y = random(windowHeight);
+  this.angle = round(random(-90, 90));
+  this.elmt.position(this.x, this.y);
 
-  this.position(random(windowWidth), random(windowHeight));
+  this.display = function() {
+    this.angle = this.angle + round(random(-2, 2));
+    this.elmt.style("transform", `rotate(${this.angle}deg)`);
+  }
 
-  this.updateElement = function() {
-    this.elmt.position(random(windowWidth), random(windowHeight));
+  this.laugh = function() {
+    this.elmt.class("fas fa-laugh fa-3x");
+    this.elmt.style("color", color(255, 220, 0));
+  }
+  this.smile = function() {
+    this.elmt.class("fas fa-smile fa-3x");
+    this.elmt.style("color", color(255, 220, 100));
+  }
+  this.meh = function() {
+    this.elmt.class("fas fa-meh fa-3x");
+    this.elmt.style("color", color(150, 200, 200));
+  }
+  this.tear = function() {
+    this.elmt.class("fas fa-sad-tear fa-3x");
+    this.elmt.style("color", color(80, 200, 250));
   }
 }
