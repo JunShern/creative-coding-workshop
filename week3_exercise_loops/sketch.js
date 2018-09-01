@@ -1,10 +1,9 @@
-
 function setup() {
-	createCanvas(700, 700);
+	createCanvas(500, 500);
 }
 
 function draw() {
-	background(30);
+	background(0);
 	let numColumns = 5;
 	let numRows = 5;
 	let columnWidth = width / numColumns;
@@ -20,9 +19,4 @@ function draw() {
 			rect(i * columnWidth, j * rowHeight, columnWidth, (j + 1) * rowHeight);	
 		}
 	}
-}
-
-function calcDistance(x1, y1, x2, y2) {
-	let dist = sqrt((x1 - x2) ** 2 + (y1 - y2) ** 2);
-	return dist;
 }
