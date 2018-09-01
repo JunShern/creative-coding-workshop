@@ -16,8 +16,9 @@ function setup() {
 }
 
 function draw() {
-  background(20);
+  background(30);
   for (let i = 0; i < dotArrayX.length; i++) {
+	// Check distance against all other dots
     for (let j=0; j<dotArrayX.length; j++) {
       let x1 = dotArrayX[i];
       let y1 = dotArrayY[i];
@@ -30,16 +31,15 @@ function draw() {
         line(x1, y1, x2, y2);
       }
     }
-
+	// Update position
     dotArrayX[i] = dotArrayX[i] + directionArrayX[i];
-    dotArrayY[i] = dotArrayY[i] + directionArrayY[i];
+	dotArrayY[i] = dotArrayY[i] + directionArrayY[i];
+	// Bounce
     if (dotArrayX[i] < 0 || dotArrayX[i] > width) {
       directionArrayX[i] = -directionArrayX[i];
-      dotArrayX[i] = constrain(dotArrayX[i], 0, width);
     }
     if (dotArrayY[i] < 0 || dotArrayY[i] > height) {
       directionArrayY[i] = -directionArrayY[i];
-      dotArrayY[i] = constrain(dotArrayY[i], 0, height);
     }
     ellipse(dotArrayX[i], dotArrayY[i], 2, 2);
   }
