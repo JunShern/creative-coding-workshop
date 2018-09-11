@@ -7,8 +7,11 @@ body {
     background-color: rgb(30,30,30);
     overflow-x: hidden;
 }
+canvas {
+    position: fixed;
+    z-index: -1;
+}
 .content {
-    position: absolute;
     margin-left: 5vw;
     max-width: 500px;
     padding: 2em;
