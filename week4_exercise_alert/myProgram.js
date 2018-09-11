@@ -1,0 +1,1 @@
+alert("Warning: This website contains dangerous amounts of awesome.");
